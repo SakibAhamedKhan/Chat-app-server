@@ -18,7 +18,17 @@ async function run() {
     try{
         await client.connect();
         console.log('MongoDB is connected');
+        const messagesCollection = client.db("dbUser1").collection("messages");
 
+        app.get('/message', async(req, res) => {
+            const result = await messagesCollection.find().toArray();
+            res.send(result);
+        })
+        app.post('/message', async(req,res) => {
+            const doc = req.body;
+            const result = await messagesCollection.insertOne(doc);
+            res.send(result);
+        })
     }
     finally {
         
